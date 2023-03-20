@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2569.97720d84
+Version:    0.0.git.2570.88349b13
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-97720d84.tar.gz
+Source:     box64-88349b13.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -28,13 +28,13 @@ cd build
 make -j$(nproc)
 
 %install
-cat %{buildroot}/system/box64.conf.cmake %{_sysconfdir}/binfmt.d/box64.conf
-cp %{buildroot}/build/system/box64.conf %{_sysconfdir}/binfmt.d
-cp %{buildroot}/x64lib/libstdc++.so.5 %{_lib}
-cp %{buildroot}/x64lib/libstdc++.so.6 %{_lib}
-cp %{buildroot}/x64lib/libgcc_s.so.1 %{_lib}
-cp %{buildroot}/x64lib/libpng12.so.0 %{_lib}
-cp %{buildroot}/system/box64.box64rc %{_sysconfdir}
+cat system/box64.conf.cmake > %{_sysconfdir}/binfmt.d/box64.conf
+cp build/system/box64.conf %{_sysconfdir}/binfmt.d
+cp x64lib/libstdc++.so.5 %{_lib}
+cp x64lib/libstdc++.so.6 %{_lib}
+cp x64lib/libgcc_s.so.1 %{_lib}
+cp x64lib/libpng12.so.0 %{_lib}
+cp system/box64.box64rc %{_sysconfdir}
 
 %post -n %{name}
 systemctl restart systemd-binfmt
