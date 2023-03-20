@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2570.88349b13
+Version:    0.0.git.2571.4a5a9a18
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-88349b13.tar.gz
+Source:     box64-4a5a9a18.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -28,7 +28,7 @@ cd build
 make -j$(nproc)
 
 %install
-cat system/box64.conf.cmake > %{_sysconfdir}/binfmt.d/box64.conf
+#cat system/box64.conf.cmake > %{_sysconfdir}/binfmt.d/box64.conf
 cp build/system/box64.conf %{_sysconfdir}/binfmt.d
 cp x64lib/libstdc++.so.5 %{_lib}
 cp x64lib/libstdc++.so.6 %{_lib}
