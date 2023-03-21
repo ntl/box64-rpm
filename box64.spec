@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2574.e00af0d7
+Version:    0.0.git.2575.644c5670
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-e00af0d7.tar.gz
+Source:     box64-644c5670.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -28,16 +28,17 @@ cd build
 make -j$(nproc)
 
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/binfmt.d
-mkdir -p $RPM_BUILD_ROOT/%{_lib}
+cd build
+make DESTDIR="%{buildroot}/" install
+#mkdir -p %{buildroot}/%{_sysconfdir}/binfmt.d
+#mkdir -p %{buildroot}/%{_lib}
 
-cp build/system/box64.conf $RPM_BUILD_ROOT/%{_sysconfdir}/binfmt.d
-cp x64lib/libstdc++.so.5 $RPM_BUILD_ROOT/%{_lib}
-cp x64lib/libstdc++.so.6 $RPM_BUILD_ROOT/%{_lib}
-cp x64lib/libgcc_s.so.1 $RPM_BUILD_ROOT/%{_lib}
-cp x64lib/libpng12.so.0 $RPM_BUILD_ROOT/%{_lib}
-cp system/box64.box64rc $RPM_BUILD_ROOT/%{_sysconfdir}
+#cp ./build/system/box64.conf %{buildroot}/%{_sysconfdir}/binfmt.d
+#cp ./x64lib/libstdc++.so.5 %{buildroot}/%{_lib}
+#cp ./x64lib/libstdc++.so.6 %{buildroot}/%{_lib}
+#cp ./x64lib/libgcc_s.so.1 %{buildroot}/%{_lib}
+#cp ./x64lib/libpng12.so.0 %{buildroot}/%{_lib}
+#cp ./system/box64.box64rc %{buildroot}/%{_sysconfdir}
 
 %post -n %{name}
 systemctl restart systemd-binfmt
@@ -45,10 +46,10 @@ systemctl restart systemd-binfmt
 %files
 %license LICENSE
 %doc README.md
-%{_lib}/libstdc++.so.5
-%{_lib}/libstdc++.so.6
-%{_lib}/libgcc_s.so.1
-%{_lib}/libpng12.so.0
+%{_libdir}/libstdc++.so.5
+%{_libdir}/libstdc++.so.6
+%{_libdir}/libgcc_s.so.1
+%{_libdir}/libpng12.so.0
 %{_sysconfdir}/box64.box64rc
 %{_sysconfdir}/binfmt.d/box64.conf
 
