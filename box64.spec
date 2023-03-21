@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2579.3093762e
+Version:    0.0.git.2580.11c63614
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-3093762e.tar.gz
+Source:     box64-11c63614.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -39,8 +39,8 @@ ls -laRt %{buildroot}
 systemctl restart systemd-binfmt
 
 %files
-%license LICENSE
-%doc README.md
+#%license LICENSE
+#%doc README.md
 %{_libdir}/libstdc++.so.5
 %{_libdir}/libstdc++.so.6
 %{_libdir}/libgcc_s.so.1
