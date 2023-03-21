@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2577.368c6c8f
+Version:    0.0.git.2578.25964cbb
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-368c6c8f.tar.gz
+Source:     box64-25964cbb.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -21,7 +21,7 @@ Box64 lets you run x86_64 Linux programs (such as games) on non-x86_64 Linux sys
 %prep
 %setup -T -b 0 -q -n box64
 mkdir -p build && cd build
-cmake .. -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr
+cmake .. -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_FULL_LIBDIR=/usr/lib64
 
 %build
 cd build
