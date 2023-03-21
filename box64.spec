@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2572.cc351fb1
+Version:    0.0.git.2574.e00af0d7
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-cc351fb1.tar.gz
+Source:     box64-e00af0d7.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -28,16 +28,19 @@ cd build
 make -j$(nproc)
 
 %install
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/binfmt.d
+mkdir -p $RPM_BUILD_ROOT/%{_lib}
 
-sudo cp build/system/box64.conf %{_sysconfdir}/binfmt.d
-sudo cp x64lib/libstdc++.so.5 %{_lib}
-sudo cp x64lib/libstdc++.so.6 %{_lib}
-sudo cp x64lib/libgcc_s.so.1 %{_lib}
-sudo cp x64lib/libpng12.so.0 %{_lib}
-sudo cp system/box64.box64rc %{_sysconfdir}
+cp build/system/box64.conf $RPM_BUILD_ROOT/%{_sysconfdir}/binfmt.d
+cp x64lib/libstdc++.so.5 $RPM_BUILD_ROOT/%{_lib}
+cp x64lib/libstdc++.so.6 $RPM_BUILD_ROOT/%{_lib}
+cp x64lib/libgcc_s.so.1 $RPM_BUILD_ROOT/%{_lib}
+cp x64lib/libpng12.so.0 $RPM_BUILD_ROOT/%{_lib}
+cp system/box64.box64rc $RPM_BUILD_ROOT/%{_sysconfdir}
 
 %post -n %{name}
-sudo systemctl restart systemd-binfmt
+systemctl restart systemd-binfmt
 
 %files
 %license LICENSE
