@@ -8,7 +8,7 @@ URL:            https://github.com/ptitSeb/box64
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 # Only relevant on 64bit arm
-ExclusiveArch:  %{aarch64}
+ExclusiveArch:  aarch64
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
