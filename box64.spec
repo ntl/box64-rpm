@@ -1,53 +1,64 @@
-%global debug_package %{nil}
-%global pkg_name box64
+Name:           box64
+Version:        0.2.2
+Release:        1%{?dist}
+Summary:        Linux Userspace x86_64 Emulator
 
-Name:       %{pkg_name}
-Version:    0.0.git.2588.5836728a
-Release:    1%{?dist}
-Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
-License:    MIT
-URL:        https://github.com/robertzaage/box64
+License:        MIT
+URL:            https://github.com/ptitSeb/box64
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
+# Only relevant on 64bit arm
+ExclusiveArch:  %{aarch64}
 
-Source:     box64-5836728a.tar.gz
-
-Provides:   %{pkg_name} = %{version}
-Recommends:    gl4es
-BuildRequires: cmake make gcc gcc-c++
+BuildRequires:  gcc-c++
+BuildRequires:  cmake
 
 %description
-Box64 lets you run x86_64 Linux programs (such as games) on non-x86_64 Linux systems, like ARM (host system needs to be 64-bit little-endian).
+Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices.
 
 %prep
-%setup -T -b 0 -q -n box64
-mkdir -p build && cd build
-cmake .. -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr
+%autosetup
+
+# Fix perms
+find . -type f -name *.c -exec chmod -x {} ';'
+find . -type f -name *.h -exec chmod -x {} ';'
+find . -type f -name *.S -exec chmod -x {} ';'
+chmod -x LICENSE
 
 %build
-cd build
-make -j$(nproc)
+%cmake \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DNOGIT=1 \
+%if 0%{?_with_dynarec}
+  -DARM_DYNAREC=1 \
+%endif
+
+%cmake_build
 
 %install
-cd build
-make DESTDIR="%{buildroot}/" install
-mv %{buildroot}/usr/lib/x86_64-linux-gnu %{buildroot}/usr/lib64
-rm -rf %{buildroot}/usr/lib
-uname -a
+%cmake_install
 
-%post -n %{name}
-systemctl restart systemd-binfmt
+# Switch to system config and use correct path
+mv %{buildroot}%{_sysconfdir}/binfmt.d %{buildroot}%{_prefix}/lib/binfmt.d
+sed -i -e 's|/usr/local|/usr|' %{buildroot}%{_prefix}/lib/binfmt.d/box64.conf
+
+%{?_with_tests:
+%check
+# Tests are failing for now as box64 isn't registered in binfmt.d
+%ctest
+}
 
 %files
-#%license LICENSE
-#%doc README.md
-%{_libdir}/libstdc++.so.5
-%{_libdir}/libstdc++.so.6
-%{_libdir}/libgcc_s.so.1
-%{_libdir}/libpng12.so.0
-%{_sysconfdir}/box64.box64rc
-%{_sysconfdir}/binfmt.d/box64.conf
+%license LICENSE 
+%{_prefix}/lib/binfmt.d/box64.conf
 %{_bindir}/box64
+%ifnarch %{x86_64}
+%{_prefix}/lib/x86_64-linux-gnu/libgcc_s.so.1
+%{_prefix}/lib/x86_64-linux-gnu/libstdc++.so.5
+%{_prefix}/lib/x86_64-linux-gnu/libstdc++.so.6
+%{_prefix}/lib/x86_64-linux-gnu/libpng12.so.0
+%endif
 
-# Finally, changes from the latest release of your application are generated from
-# your project's Git history. It will be empty until you make first annotated Git tag.
 %changelog
+* Tue Mar 21 2023 Robert Zaage <robert@zaage.it> - 0.2.2-1
+- Initial release of version 0.2.2
