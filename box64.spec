@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2580.11c63614
+Version:    0.0.git.2584.edc923ac
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-11c63614.tar.gz
+Source:     box64-edc923ac.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -47,6 +47,7 @@ systemctl restart systemd-binfmt
 %{_libdir}/libpng12.so.0
 %{_sysconfdir}/box64.box64rc
 %{_sysconfdir}/binfmt.d/box64.conf
+%{_bindir}/box64
 
 # Finally, changes from the latest release of your application are generated from
 # your project's Git history. It will be empty until you make first annotated Git tag.
