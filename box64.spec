@@ -2,18 +2,18 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2584.edc923ac
+Version:    0.0.git.2587.2f57c139
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-edc923ac.tar.gz
+Source:     box64-2f57c139.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
-BuildRequires: git cmake make gcc gcc-c++
+BuildRequires: cmake make gcc gcc-c++
 
 %description
 Box64 lets you run x86_64 Linux programs (such as games) on non-x86_64 Linux systems, like ARM (host system needs to be 64-bit little-endian).
@@ -32,8 +32,7 @@ cd build
 make DESTDIR="%{buildroot}/" install
 mv %{buildroot}/usr/lib/x86_64-linux-gnu %{buildroot}/usr/lib64
 rm -rf %{buildroot}/usr/lib
-ls -laRt %{buildroot}
-
+uname -a
 
 %post -n %{name}
 systemctl restart systemd-binfmt
