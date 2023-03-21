@@ -2,14 +2,14 @@
 %global pkg_name box64
 
 Name:       %{pkg_name}
-Version:    0.0.git.2578.25964cbb
+Version:    0.0.git.2579.3093762e
 Release:    1%{?dist}
 Summary:    Linux Userspace x86_64 Emulator with a twist, targeted at ARM64 Linux devices
 License:    MIT
 URL:        https://github.com/robertzaage/box64
 BuildArch:  noarch
 
-Source:     box64-25964cbb.tar.gz
+Source:     box64-3093762e.tar.gz
 
 Provides:   %{pkg_name} = %{version}
 Recommends:    gl4es
@@ -21,7 +21,7 @@ Box64 lets you run x86_64 Linux programs (such as games) on non-x86_64 Linux sys
 %prep
 %setup -T -b 0 -q -n box64
 mkdir -p build && cd build
-cmake .. -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_FULL_LIBDIR=/usr/lib64
+cmake .. -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr
 
 %build
 cd build
@@ -30,16 +30,10 @@ make -j$(nproc)
 %install
 cd build
 make DESTDIR="%{buildroot}/" install
-#mkdir -p %{buildroot}/%{_sysconfdir}/binfmt.d
-#mkdir -p %{buildroot}/%{_lib}
+mv %{buildroot}/usr/lib/x86_64-linux-gnu %{buildroot}/usr/lib64
+rm -rf %{buildroot}/usr/lib
 ls -laRt %{buildroot}
-pwd
-#cp ./build/system/box64.conf %{buildroot}/%{_sysconfdir}/binfmt.d
-#cp ./x64lib/libstdc++.so.5 %{buildroot}/%{_lib}
-#cp ./x64lib/libstdc++.so.6 %{buildroot}/%{_lib}
-#cp ./x64lib/libgcc_s.so.1 %{buildroot}/%{_lib}
-#cp ./x64lib/libpng12.so.0 %{buildroot}/%{_lib}
-#cp ./system/box64.box64rc %{buildroot}/%{_sysconfdir}
+
 
 %post -n %{name}
 systemctl restart systemd-binfmt
