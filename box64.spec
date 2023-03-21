@@ -52,6 +52,7 @@ sed -i -e 's|/usr/local|/usr|' %{buildroot}%{_prefix}/lib/binfmt.d/box64.conf
 %license LICENSE 
 %{_prefix}/lib/binfmt.d/box64.conf
 %{_bindir}/box64
+%{_sysconfdir}/box64.box64rc
 %ifnarch %{x86_64}
 %{_prefix}/lib/x86_64-linux-gnu/libgcc_s.so.1
 %{_prefix}/lib/x86_64-linux-gnu/libstdc++.so.5
